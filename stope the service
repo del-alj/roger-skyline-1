@@ -1,0 +1,2 @@
+first show the service opening 
+service --status-all
