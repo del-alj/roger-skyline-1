@@ -1,0 +1,29 @@
+ watch video : > https://www.youtube.com/watch?v=X3Pr5VATOyA&list=PLF8wGhsHkmx46AZ4QTTwN699gJdXbvQTx&index=5&t=0s
+
+mkdir /etc/nginx/ssl
+chmod 700 /etc/nginx/ssl
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/example.key -out /etc/nginx/ssl/example.crt
+
+add in >
+vim /etc/nginx/sites-available/website
+
+server {
+        listen          80;
+        server_name 10.11.254.253;
+        return 301 https://$server_name$request_uri;
+}
+
+server {
+        listen          443 ssl;
+        server_name 10.11.254.253;
+        ssl_certificate /etc/nginx/ssl/example.crt;
+        ssl_certificate_key /etc/nginx/ssl/example.key;
+        location / {
+                root    /var/www/html/;
+                index   index.html index.htm;
+        }
+}
+
+run >
+nginx -t
+nginx -s reload
